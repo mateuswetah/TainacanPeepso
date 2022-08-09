@@ -1,0 +1,90 @@
+/* Styles the Item Edition modal */
+.ps-dialog-tainacan-edit-item .ps-modal {
+    --modal-width: 80vw;
+}
+.ps-dialog-tainacan-edit-item .ps-modal__content {
+    padding: 0px;
+}
+.ps-dialog-tainacan-edit-item .ps-modal__content>iframe{
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 80vh;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* Customize the faceted search items list */
+.ps-page-profile .theme-items-list #tainacanViewModesSection {
+    display: none;
+}
+.theme-items-list {
+    background-color: transparent;
+    --tainacan-secondary: var(--PS-COLOR--PRIMARY);
+    --tainacan-background-color: var(--COLOR-APP); 
+    --tainacan-heading-color: var(--COLOR--HEADING);
+    --tainacan-label-color: var(--GC-COLOR--TEXT);
+    --tainacan-font-family: var(--GC-FONT-FAMILY);
+}
+.theme-items-list .search-control{
+    background-color: var(--c-gc-widget-bg);
+    box-shadow: var(--BOX-SHADOW--HARD);
+    border-radius: var(--BORDER-RADIUS--XL);
+}
+.theme-items-list .pagination-area {
+    background-color: var(--c-gc-widget-bg);
+    box-shadow: var(--BOX-SHADOW--HARD);
+    border-radius: var(--BORDER-RADIUS--XL);
+    border: none;
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+}
+.theme-items-list .table-container {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    margin-top: 1.75rem !important;
+    margin-bottom: 1.75rem !important;
+}
+.theme-items-list .table-container .table-wrapper>ul {
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+}
+.tainacan-masonry-container .tainacan-masonry-item {
+    box-shadow: var(--BOX-SHADOW--HARD);
+    border-radius: var(--BORDER-RADIUS--XL);
+    overflow: hidden;
+}
+.faceted-search-hook.faceted-search-hook-item-before {
+    position: absolute;
+    background-color: var(--PS-COLOR--PRIMARY);
+    padding: 4px 6px;
+    border-radius: 2px;
+    z-index: 1;
+    right: -14px;
+    transform: scale(0.0);
+    transition: transform 0.2s ease;
+}
+.tainacan-masonry-container .tainacan-masonry-item:hover .faceted-search-hook.faceted-search-hook-item-before {
+    transform: scale(1.0);
+}
+.faceted-search-hook.faceted-search-hook-item-before a {
+    color: white !important;
+}
+.theme-items-list:not(.is-fullscreen).is-filters-menu-open #filters-modal.filters-menu-modal {
+    background-color: transparent;
+}
+.theme-items-list:not(.is-fullscreen).is-filters-menu-open #filters-modal.filters-menu-modal .modal-background {
+    background-color: #f0f0f0;
+    opacity: 0.75;
+    display: block;
+}
+
+@media screen and (min-width: 1024px) {
+    .theme-items-list:not(.is-fullscreen).is-filters-menu-open #filters-modal.filters-menu-modal .modal-content {
+        max-width: 78vw !important;
+        max-height: 80vw !important;
+        height: auto !important;
+        box-shadow: var(--BOX-SHADOW--HARD);
+        border-radius: var(--BORDER-RADIUS--XL);
+    }    
+}

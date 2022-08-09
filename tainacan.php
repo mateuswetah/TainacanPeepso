@@ -5,7 +5,7 @@
  * Description: Plugin template for development of PeepSo addons
  * Author: PeepSo
  * Author URI: https://peepso.com
- * Version: 5.1.0.1
+ * Version: 5.1.2.0
  * Copyright: (c) 2015 PeepSo, Inc. All Rights Reserved.
  * License: GPLv2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -22,7 +22,7 @@ class PeepSoTainacan
 	private static $_instance = NULL;
 
 	const PLUGIN_NAME	 = 'Tools: Tainacan';
-	const PLUGIN_VERSION = '5.1.0.1';
+	const PLUGIN_VERSION = '5.1.2.0';
 	const PLUGIN_RELEASE = ''; //ALPHA1, BETA10, RC1, '' for STABLE
 
     public $widgets = array(
@@ -146,8 +146,8 @@ class PeepSoTainacan
         // Render the profile segment attached via peepso_navigation_profile
         $profile_slug = PeepSo::get_option('tainacan_profiles_slug', 'tainacan', TRUE);
 
-        add_action('peepso_profile_segment_' . $profile_slug, function () {
-
+        add_action('peepso_profile_segment_' . $profile_slug, function ($url_segments) {
+            
             $this->view_user_id = PeepSoUrlSegments::get_view_id(PeepSoProfileShortcode::get_instance()->get_view_user_id());
 
             // Verify if the option is enabled and the user has the right to come here.
@@ -164,8 +164,17 @@ class PeepSoTainacan
             }
 
             if($continue) {
+                
+                if(!$url_segments instanceof PeepSoUrlSegments) {
+                    $url_segments = PeepSoUrlSegments::get_instance();
+                }
+
                 // If everything is OK, print the HTML
-                echo PeepSoTemplate::exec_template('tainacan', 'profile-tainacan', array('view_user_id' => $this->view_user_id), TRUE);
+                if ($url_segments->get(3)) {
+                    echo PeepSoTemplate::exec_template('tainacan', 'profile-tainacan-collection', array('view_user_id' => $this->view_user_id, 'tainacan_collection_id' => $url_segments->get(3)), TRUE);
+                } else {
+                    echo PeepSoTemplate::exec_template('tainacan', 'profile-tainacan-collections', array('view_user_id' => $this->view_user_id), TRUE);    
+                }
             } else {
                 // If not, redirect gracefully to profile home
                 PeepSo::redirect(PeepSoUser::get_instance($this->view_user_id)->get_profileurl());
@@ -173,6 +182,12 @@ class PeepSoTainacan
         });
 
         add_filter('peepso_widgets', array(&$this, 'register_widgets'));
+
+        // Define a specific tab order - always put Audio & Video + Photos first 
+        add_filter('peepso_filter_navigation_profile_order', function($order) {
+            return array_merge(['tainacan'], $order);
+        },10);
+
 	}
 
 	/**
@@ -206,6 +221,11 @@ class PeepSoTainacan
 	{
 		wp_enqueue_style('tainacan-peepso', plugin_dir_url(__FILE__) . 'assets/css/tainacan.css', array('peepso'), self::PLUGIN_VERSION, 'all');
 		wp_enqueue_script('tainacan-peepso', plugin_dir_url(__FILE__) . 'assets/js/tainacan.js', array('peepso'), self::PLUGIN_VERSION, TRUE);
+        
+        wp_enqueue_script('tainacan-peepso-item-edition-dialog', plugin_dir_url(__FILE__) . 'assets/js/tainacan-peepso-item-edition-form.js', array('peepso'), self::PLUGIN_VERSION, TRUE);
+        wp_localize_script('tainacan-peepso-item-edition-dialog', 'tainacanpeepso_itemeditiondialog', array(
+            'template' => PeepSoTemplate::exec_template('tainacan', 'tainacan-item-edition-dialog', array(), TRUE),
+        ));
     }
     
     /**
